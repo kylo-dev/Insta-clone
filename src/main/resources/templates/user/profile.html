@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Costagram</title>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="shortcut icon" th:href="@{/images/favicon.ico}">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+
+<body>
+
+<div th:replace="fragments/nav :: nav"></div>
+<main id="profile">
+    <header class="profile__header">
+        <div class="avatar__container">
+            <form id="frm_profile_img" action="/user/profileUpload" method="post" enctype="multipart/form-data">
+                <input type="file" name="profileImage" style="display: none;" />
+            </form>
+            <img th:if="${user.profileImage != null}" th:src="@{'/upload/' + user.profileImage}" onerror="this.onerror=null; this.src='/images/avatar.jpg'"
+                 id="profile_image" th:style="${userId == principalId} ? 'cursor: pointer' : ''" />
+            <img th:unless="${user.profileImage != null}" th:src="@{/images/avatar.jpg}">
+        </div>
+
+        <div class="profile__info">
+            <div class="profile__title">
+                <h1 th:text="${user.username}"></h1>
+
+                <div th:if="${principal.user.id ne user.id}" id="follow_check">
+                    <button th:if="${followCheck eq 1}" onclick="follow(false, ${user.id})"
+                            class="profile_edit_btn">팔로잉</button>
+                    <button th:if="${followCheck ne 1}" onclick="follow(true, ${user.id})"
+                            class="profile_follow_btn">팔로우</button>
+                </div>
+
+                <div th:if="${principal.user.id eq user.id}">
+                    <a href="/image/upload">
+                        <button class="profile_follow_btn">사진등록</button>
+                    </a>
+                    <a href="/user/edit">
+                        <button class="profile_edit_btn">회원수정</button>
+                    </a> <i class="fa fa-cog fa-lg"></i>
+                </div>
+            </div>
+
+            <ul class="profile__stats">
+                <li class="profile__stat"><span class="profile__stat-number" th:text="${imageCount}"></span> 게시물</li>
+                <li class="profile__stat"><span class="profile__stat-number" th:text="${followerCount}"></span><a
+                        th:href="@{'/follow/follower/' + user.id}">팔로워</a></li>
+                <li class="profile__stat"><span class="profile__stat-number" th:text="${followCount}"></span><a
+                        th:href="@{'/follow/follow/' + user.id}">팔로우</a></li>
+            </ul>
+
+            <div class="profile__bio">
+                <p class="profile__fullname" th:text="${user.name}"></p>
+                <p th:text="${user.bio}"></p>
+                <p><a th:href="${user.website}" class="profile__link" th:text="${user.website}"></a></p>
+            </div>
+        </div>
+    </header>
+
+    <div class="profile__photo-grid">
+        <!-- 유저가 업로드한 Feed 사진 -->
+        <div th:each="image : ${user.images}" class="profile__photo">
+            <a href="image-detail.html"> <img th:src="@{'/upload/' + image.postImage}" /></a>
+            <div class="profile__photo-overlay">
+                    <span class="profile__photo-stat"> <i class="fa fa-heart"></i> <span
+                            th:text="${image.likeCount}"></span></span>
+                <span class="profile__photo-stat"> <i class="fa fa-comment"></i> 22</span>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div class="profile__overlay">
+    <i class="fa fa-times"></i>
+    <div class="profile__overlay-container">
+        <a href="/auth/password" class="profile__overlay-link">Change password</a>
+        <a href="/logout" class="profile__overlay-link" id="logout">Logout</a>
+        <a href="#" class="profile__overlay-link" id="cancel">Cancel</a>
+    </div>
+</div>
+
+<div th:replace="fragments/footer :: footer"></div>
+<script th:src="@{/js/profile.js}"></script>
+
+<script>
+    let userId = [[${user.id}]];
+    let principalId = [[$principal.user.id]];
+
+        $(function () {
+            //이미지 클릭시 업로드창 실행
+            $('#profile_image').click(function () {
+                if (userId === principalId) {
+                    $("input[name='profileImage']").click();
+                }
+            })
+        })
+</script>
+</body>
+
+</html>

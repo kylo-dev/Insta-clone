@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Costagram</title>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="shortcut icon" th:href="@{/images/favicon.ico}">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div th:replace="fragments/nav :: nav"></div>
+
+<main id="explore">
+
+    <ul class="explore__users u-default-box">
+
+        <div th:each="follow, status : ${follows}" class="explore__user">
+
+            <div class="explore__content">
+                <img th:src="@{'/upload/' + follow.toUser.profileImage}" onerror="this.onerror=null; this.src='/images/avatar.jpg'"/>
+                <div class="explore__info">
+                    <span class="explore__username" th:text="${follow.toUser.username}"></span>
+                </div>
+            </div>
+
+            <div th:id="${'follow_item_' + status.count}">
+                <div th:if="${principal.user.id != follow.toUser.id}">
+                    <div th:switch="${follow.followState}">
+                        <button th:switch="true" th:onclick="'follow(false, ' + ${follow.toUser.id} + ', ' + ${status.count} + ')'" class="following_btn">팔로잉</button>
+                        <button th:switch="*">th:onclick="'follow(true, ' + ${follow.toUser.id} + ', ' + ${status.count} + ')'" class="follow_btn">팔로우</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </ul>
+</main>
+
+<div th:replace="../include/footer :: footer"></div>
+<script th:src="@{/js/follow.js}"></script>
+</body>
+</html>
