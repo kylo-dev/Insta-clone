@@ -36,10 +36,11 @@ public class SecurityConfig {
                                 .requestMatchers("/", "/user/**", "/follow/**", "/image/**").authenticated()
                                 .anyRequest().permitAll()
                 )
+                .authenticationProvider(authenticationProvider())
                 .formLogin(form -> form
                         .loginPage("/auth/login")
                         .loginProcessingUrl("/auth/loginProc")
-                        .defaultSuccessUrl("/"));
+                        .defaultSuccessUrl("/")); // '/image/feed'
 
         return http.build();
     }

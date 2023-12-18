@@ -19,6 +19,7 @@
     <div class="login__column">
         <div class="login__box">
             <img th:src="@{/images/loginLogo.png}" />
+            
             <form th:action="@{/auth/loginProc}" method="post" class="login__form">
                 <input type="text" name="username" placeholder="Username" required>
                 <input type="password" name="password" placeholder="Password" required>

@@ -1,10 +1,74 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Miastagram</title>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="shortcut icon" th:href="@{/images/favicon.ico}">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
-<body>
 
+<body>
+<div th:replace="fragments/nav::nav"></div>
+
+<main id="feed">
+
+    <div th:each="image : ${images}" class="photo u-default-box">
+        <header class="photo__header">
+
+            <img th:src="@{'/upload/' + ${image.user.profileImage}}"
+                 th:onerror="'this.onerror=null; this.src='''/images/avatar.jpg''';'" />
+
+            <div class="photo_user_info">
+                <span class="photo__username" th:text="${image.user.username}"></span>
+                <span class="photo__location" th:text="${image.location}"></span>
+            </div>
+        </header>
+        <div class="photo_post_image">
+            <img th:src="@{'/upload/' + ${image.postImage}}" />
+        </div>
+        <div class="photo__info">
+            <div class="photo__actions">
+                    <span class="photo__action">
+                        <!-- 좋아요(하트) 이미지 -->
+                        <i th:classappend="${image.heart ? 'fa fa-heart heart heart-clicked' : 'fa fa-heart-o heart'}"
+                           th:onclick="'onFeedLoad(' + ${image.id} + ')'" th:id="${'photo_likes_count_' + ${image.id}}"></i>
+                    </span>
+                <span class="photo__action"> <i class="fa fa-comment-o"></i>
+                    </span>
+            </div>
+
+            <!-- 수정 좋아요 카운트 증가 -->
+            <span class="photo__likes" th:id="${'photo_likes_count_' + ${image.id}}"
+                  th:text="${image.likeCount}"></span><span class="photo__likes"> likes</span>
+
+            <div class="photo_caption">
+                <span class="photo__username" th:text="${image.user.username}"></span>
+                <span th:text="${image.caption}"></span>
+            </div>
+            <div class="photo_tag">
+                <span th:each="tag : ${image.tags}" th:text="'#' + ${tag.name}"></span>
+            </div>
+            <ul class="photo__comments">
+                <li class="photo__comment"><span class="photo__comment-author">serranoarevalo</span> i
+                    love this!</li>
+                <li class="photo__comment"><span class="photo__comment-author">serranoarevalo</span> i
+                    don't love this!</li>
+            </ul>
+            <span class="photo__date" th:text="${image.createDate}"></span>
+            <div class="photo__add-comment-container">
+                <textarea placeholder="Add a comment..."></textarea>
+                <i class="fa fa-ellipsis-h"></i>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<div th:replace="fragments/footer::footer"></div>
+<script th:src="@{/js/feed.js}"></script>
+<script th:src="@{/js/like.js}"></script>
 </body>
 </html>
