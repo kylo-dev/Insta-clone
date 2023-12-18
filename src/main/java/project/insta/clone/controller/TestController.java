@@ -11,4 +11,8 @@ public class TestController {
         return "home";
     }
 
+    @GetMapping("/test/explore")
+    public String testExplore(){
+        return "image/explore";
+    }
 }

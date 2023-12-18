@@ -24,5 +24,5 @@ public class Follow extends BaseEntity{
     private User toUser;
 
     @Transient
-    private boolean matpal;
+    private boolean followState;
 }

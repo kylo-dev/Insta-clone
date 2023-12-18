@@ -20,8 +20,7 @@
             <form id="frm_profile_img" action="/user/profileUpload" method="post" enctype="multipart/form-data">
                 <input type="file" name="profileImage" style="display: none;" />
             </form>
-            <img th:if="${user.profileImage != null}" th:src="@{'/upload/' + user.profileImage}" onerror="this.onerror=null; this.src='/images/avatar.jpg'"
-                 id="profile_image" th:style="${userId == principalId} ? 'cursor: pointer' : ''" />
+            <img th:if="${user.profileImage != null}" th:src="@{'/upload/' + user.profileImage}" id="profile_image" th:style="${userId == principalId} ? 'cursor: pointer' : ''" />
             <img th:unless="${user.profileImage != null}" th:src="@{/images/avatar.jpg}">
         </div>
 
@@ -29,10 +28,10 @@
             <div class="profile__title">
                 <h1 th:text="${user.username}"></h1>
 
-                <div th:if="${principal.user.id ne user.id}" id="follow_check">
-                    <button th:if="${followCheck eq 1}" onclick="follow(false, ${user.id})"
+                <div th:if="${principal.user.userId != user.userId}" id="follow_check">
+                    <button th:if="${followCheck == 1}" onclick="follow(false, ${user.id})"
                             class="profile_edit_btn">팔로잉</button>
-                    <button th:if="${followCheck ne 1}" onclick="follow(true, ${user.id})"
+                    <button th:if="${followCheck != 1}" onclick="follow(true, ${user.id})"
                             class="profile_follow_btn">팔로우</button>
                 </div>
 
@@ -88,8 +87,8 @@
 <script th:src="@{/js/profile.js}"></script>
 
 <script>
-    let userId = [[${user.id}]];
-    let principalId = [[$principal.user.id]];
+    let userId = [[${user.userId}]];
+    let principalId = [[${principal.user.userId}]];
 
         $(function () {
             //이미지 클릭시 업로드창 실행
