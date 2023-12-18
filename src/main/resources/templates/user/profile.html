@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Costagram</title>
+    <title>Miastagram</title>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="shortcut icon" th:href="@{/images/favicon.ico}">
     <link rel="stylesheet" th:href="@{/css/styles.css}">
@@ -14,13 +14,16 @@
 <body>
 
 <div th:replace="fragments/nav :: nav"></div>
+
 <main id="profile">
     <header class="profile__header">
+
         <div class="avatar__container">
             <form id="frm_profile_img" action="/user/profileUpload" method="post" enctype="multipart/form-data">
                 <input type="file" name="profileImage" style="display: none;" />
             </form>
-            <img th:if="${user.profileImage != null}" th:src="@{'/upload/' + user.profileImage}" id="profile_image" th:style="${userId == principalId} ? 'cursor: pointer' : ''" />
+            <img th:if="${user.profileImage != null}" th:src="@{'/upload/' + ${user.profileImage}}" id="profile_image"
+                 th:style="${user.userId == principal.user.userId} ? 'cursor: pointer' : ''" />
             <img th:unless="${user.profileImage != null}" th:src="@{/images/avatar.jpg}">
         </div>
 
@@ -29,17 +32,16 @@
                 <h1 th:text="${user.username}"></h1>
 
                 <div th:if="${principal.user.userId != user.userId}" id="follow_check">
-                    <button th:if="${followCheck == 1}" onclick="follow(false, ${user.id})"
+                    <button th:if="${followCheck == 1}" onclick="follow(false, ${user.userId})"
                             class="profile_edit_btn">팔로잉</button>
-                    <button th:if="${followCheck != 1}" onclick="follow(true, ${user.id})"
+                    <button th:if="${followCheck != 1}" onclick="follow(true, ${user.userId})"
                             class="profile_follow_btn">팔로우</button>
                 </div>
-
-                <div th:if="${principal.user.id eq user.id}">
-                    <a href="/image/upload">
+                <div th:if="${principal.user.userId == user.userId}">
+                    <a th:href="@{/image/upload}">
                         <button class="profile_follow_btn">사진등록</button>
                     </a>
-                    <a href="/user/edit">
+                    <a th:href="@{/user/edit}">
                         <button class="profile_edit_btn">회원수정</button>
                     </a> <i class="fa fa-cog fa-lg"></i>
                 </div>
@@ -48,9 +50,9 @@
             <ul class="profile__stats">
                 <li class="profile__stat"><span class="profile__stat-number" th:text="${imageCount}"></span> 게시물</li>
                 <li class="profile__stat"><span class="profile__stat-number" th:text="${followerCount}"></span><a
-                        th:href="@{'/follow/follower/' + user.id}">팔로워</a></li>
+                        th:href="@{'/follow/follower/' + ${user.userId}}">팔로워</a></li>
                 <li class="profile__stat"><span class="profile__stat-number" th:text="${followCount}"></span><a
-                        th:href="@{'/follow/follow/' + user.id}">팔로우</a></li>
+                        th:href="@{'/follow/follow/' + ${user.userId}}">팔로우</a></li>
             </ul>
 
             <div class="profile__bio">
@@ -64,11 +66,16 @@
     <div class="profile__photo-grid">
         <!-- 유저가 업로드한 Feed 사진 -->
         <div th:each="image : ${user.images}" class="profile__photo">
-            <a href="image-detail.html"> <img th:src="@{'/upload/' + image.postImage}" /></a>
+            <a href="image-detail.html">
+                <img th:src="@{'/upload/' + ${image.postImage}}" />
+            </a>
             <div class="profile__photo-overlay">
-                    <span class="profile__photo-stat"> <i class="fa fa-heart"></i> <span
-                            th:text="${image.likeCount}"></span></span>
-                <span class="profile__photo-stat"> <i class="fa fa-comment"></i> 22</span>
+                    <span class="profile__photo-stat">
+                        <i class="fa fa-heart"></i>
+                        <span th:text="${image.likeCount}"></span>
+                    </span>
+                <span class="profile__photo-stat">
+                    <i class="fa fa-comment"></i> 22</span>
             </div>
         </div>
     </div>
@@ -96,7 +103,11 @@
                 if (userId === principalId) {
                     $("input[name='profileImage']").click();
                 }
-            })
+            });
+            //업로드 파일체인지가 됐을경우 실행되는 이벤트 - form태그에 fileProfile은 hidden으로 넣어줌
+            $("input[name='profileImage']").change(function() {
+                $("#frm_profile_img").submit();
+            });
         })
 </script>
 </body>
