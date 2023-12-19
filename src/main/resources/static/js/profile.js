@@ -1,28 +1,22 @@
-function follow(check, userId){
-	// true -> follow 하기
-	// false -> unFollow 하기
-	let url = "/follow/"+userId;
-	if(check){
-		fetch(url,{
-			method: "POST"
-	    }).then(function(res){
-			return res.text();							
-		}).then(function(res){
-			if(res === "ok"){
+function followAjax(check, userId){
+	let url = "/follow/" + userId;
+	let method = check ? "POST" : "DELETE";
+
+	$.ajax({
+		url: url,
+		method: method,
+		success: function (data){
+			if (data === "ok") {
 				let follow_check_el = document.querySelector("#follow_check");
-				follow_check_el.innerHTML = "<button onClick='follow(false, "+userId+")' class='profile_edit_btn'>팔로잉</button>";
+				if (check) {
+					follow_check_el.html("<button onclick='followAjax(false, " + userId + ")' class='profile_edit_btn'>팔로잉</button>");
+				} else {
+					follow_check_el.html("<button onclick='followAjax(true, " + userId + ")' class='profile_follow_btn'>팔로우</button>");
+				}
 			}
-		});
-	}else{
-		fetch(url,{
-			method: "DELETE"
-	    }).then(function(res){
-			return res.text();							
-		}).then(function(res){
-			if(res === "ok"){
-				let follow_check_el = document.querySelector("#follow_check");
-				follow_check_el.innerHTML = "<button onClick='follow(true, "+userId+")' class='profile_follow_btn'>팔로우</button>";
-			}
-		});
-	}
+		},
+		error: function (error){
+			console.error("Ajax error:", error);
+		}
+	});
 }

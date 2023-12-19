@@ -1,6 +1,9 @@
 package project.insta.clone.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -10,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import project.insta.clone.config.auth.PrincipalDetails;
 import project.insta.clone.domain.Follow;
 import project.insta.clone.domain.User;
+import project.insta.clone.dto.ResponseDTO;
 import project.insta.clone.dto.follow.FollowResponseDTO;
 import project.insta.clone.service.follow.FollowCommandService;
 import project.insta.clone.service.user.UserQueryService;
@@ -22,8 +26,8 @@ public class FollowController {
     private final FollowCommandService followCommandService;
 
     @PostMapping("/follow/{id}")
-    public @ResponseBody FollowResponseDTO.FollowResultDTO follow(@AuthenticationPrincipal PrincipalDetails principalDetails,
-                                                                  @PathVariable Long id){
+    public ResponseEntity<ResponseDTO.ResponseResultDTO> follow(@AuthenticationPrincipal PrincipalDetails principalDetails,
+                                                            @PathVariable Long id){
         // 로그인한 사용자 정보
         User fromUser = principalDetails.getUser();
 
@@ -36,11 +40,11 @@ public class FollowController {
         Follow follow = followCommandService.follow(fromUser, toUser);
 
         // converter
-        return FollowResponseDTO.toFollowResultDTO(follow);
+        return ResponseEntity.ok(new ResponseDTO.ResponseResultDTO(HttpStatus.OK, 1));
     }
 
     @DeleteMapping("/follow/{id}")
-    public @ResponseBody FollowResponseDTO.UnFollowResultDTO unfollow(@AuthenticationPrincipal PrincipalDetails principalDetails,
+    public ResponseEntity<ResponseDTO.ResponseResultDTO> unfollow(@AuthenticationPrincipal PrincipalDetails principalDetails,
                                                                     @PathVariable Long id){
         User fromUser = principalDetails.getUser();
 
@@ -50,6 +54,6 @@ public class FollowController {
 
         followCommandService.unfollow(fromUser, toUser);
 
-        return FollowResponseDTO.toUnFollowResultDTO(fromUser, toUser);
+        return ResponseEntity.ok(new ResponseDTO.ResponseResultDTO(HttpStatus.OK, 1));
     }
 }
