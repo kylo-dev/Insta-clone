@@ -3,8 +3,11 @@ package project.insta.clone.service.follow;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import project.insta.clone.domain.Follow;
 import project.insta.clone.domain.User;
 import project.insta.clone.repository.FollowRepository;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -24,5 +27,15 @@ public class FollowQueryService {
     public int followerCount(User user){
         return followRepository.countByToUser(user);
     }
+
+    public List<Follow> getFollowerList(Long id){
+        return followRepository.findByToUserId(id);
+    }
+
+    public List<Follow> getFollowList(Long id){
+        return followRepository.findByFromUserId(id);
+    }
+
+
 
 }

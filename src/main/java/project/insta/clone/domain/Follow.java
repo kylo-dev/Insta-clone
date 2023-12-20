@@ -25,4 +25,8 @@ public class Follow extends BaseEntity{
 
     @Transient
     private boolean followState;
+
+    public void setFollowState(Boolean check){
+        this.followState = check;
+    }
 }

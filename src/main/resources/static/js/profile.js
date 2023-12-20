@@ -6,12 +6,12 @@ function followAjax(check, userId){
 		url: url,
 		method: method,
 		success: function (data){
-			if (data === "ok") {
+			if (data.data === 1) {
 				let follow_check_el = document.querySelector("#follow_check");
 				if (check) {
-					follow_check_el.html("<button onclick='followAjax(false, " + userId + ")' class='profile_edit_btn'>팔로잉</button>");
+					follow_check_el.innerHTML = "<button onclick='followAjax(false, " + userId + ")' class='profile_edit_btn'>팔로잉</button>";
 				} else {
-					follow_check_el.html("<button onclick='followAjax(true, " + userId + ")' class='profile_follow_btn'>팔로우</button>");
+					follow_check_el.innerHTML = "<button onclick='followAjax(true, " + userId + ")' class='profile_follow_btn'>팔로우</button>";
 				}
 			}
 		},

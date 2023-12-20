@@ -31,5 +31,5 @@ public class User extends BaseEntity{
     private List<Image> images = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    private List<Like> likes = new ArrayList<>();
+    private List<Likes> likes = new ArrayList<>();
 }

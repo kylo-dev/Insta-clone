@@ -29,7 +29,7 @@ public class Image extends BaseEntity{
     private User user;
 
     @OneToMany(mappedBy = "image")
-    private List<Like> likes = new ArrayList<>();
+    private List<Likes> likes = new ArrayList<>();
 
     @OneToMany(mappedBy = "image")
     private List<Tag> tags = new ArrayList<>();

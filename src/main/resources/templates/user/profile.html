@@ -33,9 +33,9 @@
                 <h1 th:text="${user.username}"></h1>
 
                 <div th:if="${principal.user.userId != user.userId}" id="follow_check">
-                    <button th:if="${followCheck == 1}" onclick="followAjax(false)"
+                    <button th:if="${followCheck == 1}" th:onclick="'followAjax(false, ' + ${user.userId} + ')'"
                             class="profile_edit_btn">팔로잉</button>
-                    <button th:if="${followCheck != 1}" onclick="followAjax(true)"
+                    <button th:if="${followCheck != 1}" th:onclick="'followAjax(true, ' + ${user.userId} + ')'"
                             class="profile_follow_btn">팔로우</button>
                 </div>
                 <div th:if="${principal.user.userId == user.userId}">
@@ -92,33 +92,34 @@
 </div>
 
 <div th:replace="fragments/footer :: footer"></div>
-<!--<script th:src="@{/js/profile.js}"></script>-->
+<script th:src="@{/js/profile.js}"></script>
+<script th:src="@{/js/modal.js}"></script>
 
-<script th:inline="javascript">
-    function followAjax(check){
-        let userId = [[${user.userId}]];
-        let url = "/follow/" + userId;
-        let method = check ? "POST" : "DELETE";
+<!--<script th:inline="javascript">-->
+<!--    function followAjax(check){-->
+<!--        let userId = [[${user.userId}]];-->
+<!--        let url = "/follow/" + userId;-->
+<!--        let method = check ? "POST" : "DELETE";-->
 
-        $.ajax({
-            url: url,
-            method: method,
-            success: function (data){
-                if (data.data === 1) {
-                    let follow_check_el = $("#follow_check");
-                    if (check) {
-                        follow_check_el.html("<button onclick='followAjax(false)' class='profile_edit_btn'>팔로잉</button>");
-                    } else {
-                        follow_check_el.html("<button onclick='followAjax(true)' class='profile_follow_btn'>팔로우</button>");
-                    }
-                }
-            },
-            error: function (error){
-                console.error("Ajax error:", error);
-            }
-        });
-    }
-</script>
+<!--        $.ajax({-->
+<!--            url: url,-->
+<!--            method: method,-->
+<!--            success: function (data){-->
+<!--                if (data.data === 1) {-->
+<!--                    let follow_check_el = $("#follow_check");-->
+<!--                    if (check) {-->
+<!--                        follow_check_el.html("<button onclick='followAjax(false)' class='profile_edit_btn'>팔로잉</button>");-->
+<!--                    } else {-->
+<!--                        follow_check_el.html("<button onclick='followAjax(true)' class='profile_follow_btn'>팔로우</button>");-->
+<!--                    }-->
+<!--                }-->
+<!--            },-->
+<!--            error: function (error){-->
+<!--                console.error("Ajax error:", error);-->
+<!--            }-->
+<!--        });-->
+<!--    }-->
+<!--</script>-->
 
 <script>
     let userId = [[${user.userId}]];

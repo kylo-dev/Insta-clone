@@ -13,11 +13,9 @@ import project.insta.clone.domain.Image;
 import project.insta.clone.domain.User;
 import project.insta.clone.dto.user.UserRequestDTO;
 import project.insta.clone.service.follow.FollowQueryService;
-import project.insta.clone.service.like.LikeQueryService;
+import project.insta.clone.service.like.LikesQueryService;
 import project.insta.clone.service.user.UserCommandService;
 import project.insta.clone.service.user.UserQueryService;
-
-import java.util.Optional;
 
 
 @Controller
@@ -27,7 +25,7 @@ public class UserController {
     private final UserCommandService userCommandService;
     private final UserQueryService userQueryService;
     private final FollowQueryService followQueryService;
-    private final LikeQueryService likeQueryService;
+    private final LikesQueryService likeQueryService;
 
     @GetMapping("/auth/login")
     public String authLogin(){
@@ -50,6 +48,7 @@ public class UserController {
     @GetMapping("/user/{id}")
     public String profile(@PathVariable Long id, @AuthenticationPrincipal PrincipalDetails principalDetails,
                           Model model){
+        System.out.println("principalDetails = " + principalDetails);
         /**
          * 1. imageCount - 게시글 개수
          * 2. followerCount - 팔로워 개수
