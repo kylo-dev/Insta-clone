@@ -2,7 +2,6 @@ package project.insta.clone.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -12,7 +11,6 @@ import project.insta.clone.config.auth.PrincipalDetails;
 import project.insta.clone.domain.Follow;
 import project.insta.clone.domain.User;
 import project.insta.clone.dto.ResponseDTO;
-import project.insta.clone.dto.follow.FollowResponseDTO;
 import project.insta.clone.service.follow.FollowCommandService;
 import project.insta.clone.service.follow.FollowQueryService;
 import project.insta.clone.service.user.UserQueryService;

@@ -16,7 +16,8 @@
     <div class="edit-profile__container u-default-box">
         <header class="edit-profile__header">
             <div class="fucker-container">
-                <img th:src="@{'/upload/' +${user.profileImage}}" />
+                <img th:if="${user.profileImage != null}" th:src="@{'/upload/' + ${user.profileImage}}"/>
+                <img th:unless="${user.profileImage != null}" th:src="@{/images/avatar.jpg}">
             </div>
             <h1 class="edit-profile__username" th:text="${user.username}"></h1>
         </header>

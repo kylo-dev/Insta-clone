@@ -27,6 +27,9 @@ public class User extends BaseEntity{
     private String gender;
     private String profileImage; // 프로필 사진 경로 + 이름
 
+    private String provider;
+    private String providerId;
+
     @OneToMany(mappedBy = "user")
     @OrderBy("imageId desc")
     private List<Image> images = new ArrayList<>();
