@@ -15,4 +15,17 @@ public class UserRequestDTO {
         private String username;
         private String password;
     }
+
+    @Data
+    @NoArgsConstructor
+    public static class EditDTO{
+        private Long userId;
+        private String name;
+        private String username;
+        private String website;
+        private String bio;
+        private String email;
+        private String phone;
+        private String gender;
+    }
 }

@@ -4,24 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Costagram</title>
+    <title>Miastagram</title>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="shortcut icon" th:href="@{/images/favicon.ico}">
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-<header th:replace="fragments/nav :: navbar"/>
+<header th:replace="fragments/nav :: nav"/>
 
 <main id="edit-profile">
     <div class="edit-profile__container u-default-box">
         <header class="edit-profile__header">
             <div class="fucker-container">
-                <img th:src="@{/upload/{user.profileImage}}" />
+                <img th:src="@{'/upload/' +${user.profileImage}}" />
             </div>
             <h1 class="edit-profile__username" th:text="${user.username}"></h1>
         </header>
 
-        <form action="/user/editProc" method="PUT" class="edit-profile__form">
+        <form class="edit-profile__form">
+            <input type="hidden" id="userId" th:value="${user.userId}">
             <div class="edit-profile__row">
                 <label class="edit-profile__label" for="name">Name</label>
                 <input id="name" name="name" type="text" th:value="${user.name}">
@@ -50,13 +51,49 @@
                 <label class="edit-profile__label" for="gender">Gender</label>
                 <input id="gender" name="gender" type="text" th:value="${user.gender}">
             </div>
-            <div class="edit-profile__row">
-                <span></span>
-                <input style="background-color:#3897F0;" type="submit">
-            </div>
         </form>
+        <div class="edit-profile__row">
+            <span></span>
+            <input style="background-color:#3897F0;" type="submit" onclick="userEdit()">
+        </div>
     </div>
 </main>
+
+<script>
+    function userEdit(){
+        let userId = $("#userId").val()
+
+        let data = {
+            userId: userId,
+            name: $("#name").val(),
+            username: $("#username").val(),
+            website: $("#website").val(),
+            bio: $("#bio").val(),
+            email: $("#email").val(),
+            phone: $("#phone").val(),
+            gender: $("#gender").val()
+        };
+        console.log(data);
+
+        $.ajax({
+            url: "/user/editProc",
+            method: "PATCH",
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json"
+        }).done(function (data){
+            if(data.data === 1){
+                alert("회원 정보 수정이 완료되었습니다.");
+                location.href = `/user/${userId}`;
+            } else {
+                alert("죄송합니다. 정보 수정이 안되었습니다.");
+                location.href = `/user/${userId}`;
+            }
+        }).fail(function (error){
+            alert(JSON.stringify(error));
+        })
+    }
+</script>
 
 <footer th:replace="fragments/footer :: footer"/>
 </body>

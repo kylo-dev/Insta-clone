@@ -1,21 +1,23 @@
 package project.insta.clone.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import project.insta.clone.config.auth.PrincipalDetails;
 import project.insta.clone.domain.Image;
 import project.insta.clone.domain.User;
+import project.insta.clone.dto.ResponseDTO;
 import project.insta.clone.dto.user.UserRequestDTO;
 import project.insta.clone.service.follow.FollowQueryService;
 import project.insta.clone.service.like.LikesQueryService;
 import project.insta.clone.service.user.UserCommandService;
 import project.insta.clone.service.user.UserQueryService;
+
+import java.util.Optional;
 
 
 @Controller
@@ -83,8 +85,24 @@ public class UserController {
         model.addAttribute("followCount", followCount);
         model.addAttribute("followerCount", followerCount);
         model.addAttribute("followCheck", followCheck);
-
         return "user/profile";
+    }
 
+    @GetMapping("/user/edit")
+    public String userEdit(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model){
+        User user = userQueryService.findById(principalDetails.getUser().getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("Not Found User"));
+
+        model.addAttribute("user", user);
+        model.addAttribute("principal", principalDetails);
+        return "user/profile_edit";
+    }
+
+    @PatchMapping("/user/editProc")
+    public ResponseEntity<ResponseDTO.ResponseResultDTO> userEditProc(@RequestBody UserRequestDTO.EditDTO request){
+
+        userCommandService.editUser(request);
+
+        return ResponseEntity.ok(new ResponseDTO.ResponseResultDTO(HttpStatus.OK, 1));
     }
 }
