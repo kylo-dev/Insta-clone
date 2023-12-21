@@ -17,20 +17,20 @@
     <ul class="explore__users u-default-box">
 
         <div th:each="follow: ${follows}" class="explore__user">
-
             <div class="explore__content">
-                <img th:src="@{'/upload/' + ${follow.toUser.profileImage}}" onerror="this.onerror=null; this.src='/images/avatar.jpg'"/>
+<!--                <img th:if="${follow.toUser.profileImage != null}" th:src="@{'/upload/' + follow.toUser.profileImage}"/>-->
+<!--                <img th:unless="${follow.toUser.profileImage != null}" th:src="@{/images/avatar.jpg}">-->
+
+                <img th:src="@{'/upload/' + ${follow.toUser.profileImage}}" th:onerror="this.src='/images/avatar.jpg'"/>
                 <div class="explore__info">
                     <span class="explore__username" th:text="${follow.toUser.username}"></span>
                 </div>
             </div>
 
-            <div th:id="${'follow_item_' + status.count}">
-                <div th:if="${principal.user.id != follow.toUser.id}">
-                    <div th:switch="${follow.followState}">
-                        <button th:switch="true" th:onclick="'follow(false, ' + ${follow.toUser.id} + ', ' + ${status.count} + ')'" class="following_btn">팔로잉</button>
-                        <button th:switch="*">th:onclick="'follow(true, ' + ${follow.toUser.id} + ', ' + ${status.count} + ')'" class="follow_btn">팔로우</button>
-                    </div>
+            <div th:id="${'follow_item_' + follows.size()}">
+                <div th:if="${principal.user.userId != follow.toUser.userId}">
+                    <button th:if="${follow.followState}" th:onclick="'follow(false, ' + ${follow.toUser.userId} + ', ' + ${follows.size()} + ')'" class="following_btn">팔로잉</button>
+                    <button th:unless="${follow.followState}" th:onclick="'follow(true, ' + ${follow.toUser.userId} + ', ' + ${follows.size()} + ')'" class="follow_btn">팔로우</button>
                 </div>
             </div>
 
@@ -41,30 +41,5 @@
 
 <div th:replace="fragments/footer :: footer"></div>
 <script th:src="@{/js/follow.js}"></script>
-<script th:inline="javascript">
-    function followAjax(check){
-        let userId = [[${user.userId}]];
-        let url = "/follow/" + userId;
-        let method = check ? "POST" : "DELETE";
-
-        $.ajax({
-            url: url,
-            method: method,
-            success: function (data){
-                if (data.data === 1) {
-                    let follow_check_el = $("#follow_check");
-                    if (check) {
-                        follow_check_el.html("<button onclick='followAjax(false)' class='profile_edit_btn'>팔로잉</button>");
-                    } else {
-                        follow_check_el.html("<button onclick='followAjax(true)' class='profile_follow_btn'>팔로우</button>");
-                    }
-                }
-            },
-            error: function (error){
-                console.error("Ajax error:", error);
-            }
-        });
-    }
-</script>
 </body>
 </html>

@@ -89,6 +89,19 @@ public class FollowController {
                                  @AuthenticationPrincipal PrincipalDetails principalDetails,
                                  Model model){
         // 팔로우 리스트
+        List<Follow> follows = followQueryService.getFollowList(id);
+
+        List<Follow> principalFollows = followQueryService.getFollowList(principalDetails.getUser().getUserId());
+
+        for (Follow f1: follows){
+            for (Follow f2: principalFollows){
+                if (f1.getToUser().getUserId() == f2.getToUser().getUserId()){
+                    f1.setFollowState(true);
+                }
+            }
+        }
+        model.addAttribute("follows", follows);
+        model.addAttribute("principal", principalDetails);
         return "follow/follow";
     }
 }
