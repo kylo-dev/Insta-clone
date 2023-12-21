@@ -20,8 +20,6 @@ public class Image extends BaseEntity{
     private String location; // 사진 찍은 위치
     private String caption; // 사진 설명
     private String postImage; // 포스팅 사진 경로 + 이름
-    @Transient // DB에 영향을 주지 않음
-    private int likeCount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
@@ -33,10 +31,19 @@ public class Image extends BaseEntity{
     @OneToMany(mappedBy = "image", cascade = CascadeType.ALL)
     private List<Tag> tags = new ArrayList<>();
 
+    @Transient // DB에 영향을 주지 않음
+    private int likeCount;
+
+    @Transient
+    private boolean heart;
+
     public void setLikeCount(int likeCount) {
         this.likeCount = likeCount;
     }
 
+    public void setHeart(boolean check){
+        this.heart = check;
+    }
     //== 연관관계 편의 메소드 ==//
     public void setUser(User user){
         this.user = user;

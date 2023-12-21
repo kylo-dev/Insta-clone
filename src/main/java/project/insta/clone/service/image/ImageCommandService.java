@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import project.insta.clone.config.auth.PrincipalDetails;
 import project.insta.clone.domain.Image;
 import project.insta.clone.domain.Tag;
 import project.insta.clone.domain.User;
@@ -72,5 +71,9 @@ public class ImageCommandService {
             imageTag.setImage(image);
             tagRepository.save(imageTag);
         }
+    }
+
+    public void setImageLikeCount(Image image, int likeCount){
+        image.setLikeCount(likeCount);
     }
 }
