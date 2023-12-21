@@ -26,10 +26,12 @@
             </div>
             <!-- 섬네일은 아래 주소 참고 -->
             <!-- https://medium.com/@asadise/create-thumbnail-for-an-image-in-spring-framework-49776c873ea1 -->
-            <form action="/image/uploadProc" method="post" enctype="multipart/form-data">
+            <form th:action="@{/image/uploadProc}" method="post" enctype="multipart/form-data">
                 <table class="table">
                     <tr>
-                        <td><input id="input_img" type="file" name="file" placeholder="사진파일"></td>
+                        <td>
+                            <input id="input_img" type="file" name="file" placeholder="사진파일">
+                        </td>
                     </tr>
                     <tr>
                         <td>
@@ -39,13 +41,19 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><input type="text" name="caption" placeholder="이미지 소개"></td>
+                        <td>
+                            <input type="text" name="caption" placeholder="이미지 소개">
+                        </td>
                     </tr>
                     <tr>
-                        <td><input type="text" name="location" placeholder="위치"></td>
+                        <td>
+                            <input type="text" name="location" placeholder="위치">
+                        </td>
                     </tr>
                     <tr>
-                        <td><input type="text" name="tags" placeholder="#태그"></td>
+                        <td>
+                            <input type="text" name="tags" placeholder="#태그">
+                        </td>
                     </tr>
                 </table>
                 <input type="submit" value="업로드">
@@ -67,16 +75,24 @@
         $('#input_img').on("change", handleImgFileSelect);
     });
     function handleImgFileSelect(e) {
+        console.log(e);
+        // 선택된 파일 가져오기
         var files = e.target.files;
+        // 파일을 배열로 변환
         var filesArr = Array.prototype.slice.call(files);
+
         filesArr.forEach(function(f) {
             if (!f.type.match("image.*")) {
                 alert("확장자는 이미지 확장자만 가능합니다.");
                 return;
             }
             sel_file = f;
+            // 파일 내용을 읽기 위한 새 FileReader 객체 생성
             var reader = new FileReader();
+
+            // 파일 읽기가 완료되면 실행될 콜백 함수 설정
             reader.onload = function(e) {
+                console.log(e);
                 $('#img').attr('src', e.target.result);
             }
             reader.readAsDataURL(f);

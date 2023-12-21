@@ -9,7 +9,6 @@ import java.util.List;
 @Entity
 @Builder
 @Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Image extends BaseEntity{
@@ -28,9 +27,19 @@ public class Image extends BaseEntity{
     @JoinColumn(name = "userId")
     private User user;
 
-    @OneToMany(mappedBy = "image")
+    @OneToMany(mappedBy = "image", cascade = CascadeType.ALL)
     private List<Likes> likes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "image")
+    @OneToMany(mappedBy = "image", cascade = CascadeType.ALL)
     private List<Tag> tags = new ArrayList<>();
+
+    public void setLikeCount(int likeCount) {
+        this.likeCount = likeCount;
+    }
+
+    //== 연관관계 편의 메소드 ==//
+    public void setUser(User user){
+        this.user = user;
+        user.getImages().add(this);
+    }
 }

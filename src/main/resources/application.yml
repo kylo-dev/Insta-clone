@@ -21,4 +21,4 @@ spring:
       max-file-size: 2MB
 
 file:
-  path: C:/spring/insta.clone/insta.clone/src/main/resources/upload/
+  path: C:/spring/insta.clone/insta.clone/src/main/resources/static/upload/
