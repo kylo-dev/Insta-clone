@@ -1,23 +1,29 @@
 package project.insta.clone.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import project.insta.clone.config.auth.PrincipalDetails;
 import project.insta.clone.domain.Image;
 import project.insta.clone.domain.User;
 import project.insta.clone.dto.ResponseDTO;
 import project.insta.clone.dto.user.UserRequestDTO;
 import project.insta.clone.service.follow.FollowQueryService;
+import project.insta.clone.service.image.ImageCommandService;
 import project.insta.clone.service.like.LikesQueryService;
 import project.insta.clone.service.user.UserCommandService;
 import project.insta.clone.service.user.UserQueryService;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Optional;
+import java.util.UUID;
 
 
 @Controller
@@ -28,6 +34,7 @@ public class UserController {
     private final UserQueryService userQueryService;
     private final FollowQueryService followQueryService;
     private final LikesQueryService likeQueryService;
+    private final ImageCommandService imageCommandService;
 
     @GetMapping("/auth/login")
     public String authLogin(){
@@ -104,5 +111,13 @@ public class UserController {
         userCommandService.editUser(request);
 
         return ResponseEntity.ok(new ResponseDTO.ResponseResultDTO(HttpStatus.OK, 1));
+    }
+
+    @PostMapping("/user/profileUpload")
+    public String userProfileUploadProc(@RequestParam("profileImage")MultipartFile file,
+                                        @AuthenticationPrincipal PrincipalDetails principalDetails) throws IOException{
+        Long userId = principalDetails.getUser().getUserId();
+        imageCommandService.profileUpload(userId, file);
+        return "redirect:/user/" + userId;
     }
 }

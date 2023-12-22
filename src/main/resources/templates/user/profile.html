@@ -22,9 +22,9 @@
             <form id="frm_profile_img" action="/user/profileUpload" method="post" enctype="multipart/form-data">
                 <input type="file" name="profileImage" style="display: none;" />
             </form>
-            <img th:if="${user.profileImage != null}" th:src="@{'/upload/' + ${user.profileImage}}" id="profile_image"
-                 th:style="${user.userId == principal.user.userId} ? 'cursor: pointer' : ''" />
-            <img th:unless="${user.profileImage != null}" th:src="@{/images/avatar.jpg}">
+            <img th:if="${user.profileImage != null}" th:src="@{'/upload/' + ${user.profileImage}}" th:id="profile_image"
+                 style="cursor: pointer"/>
+            <img th:unless="${user.profileImage != null}" th:src="@{/images/avatar.jpg}" th:id="profile_image" style="cursor: pointer">
         </div>
 
         <div class="profile__info">
@@ -49,11 +49,17 @@
             </div>
 
             <ul class="profile__stats">
-                <li class="profile__stat"><span class="profile__stat-number" th:text="${imageCount}"></span> 게시물</li>
-                <li class="profile__stat"><span class="profile__stat-number" th:text="${followerCount}"></span><a
-                        th:href="@{'/follow/follower/' + ${user.userId}}">팔로워</a></li>
-                <li class="profile__stat"><span class="profile__stat-number" th:text="${followCount}"></span><a
-                        th:href="@{'/follow/follow/' + ${user.userId}}">팔로우</a></li>
+                <li class="profile__stat">
+                    <span class="profile__stat-number" th:text="${imageCount}"></span> 게시물
+                </li>
+                <li class="profile__stat">
+                    <span class="profile__stat-number" th:text="${followerCount}"></span><a
+                        th:href="@{'/follow/follower/' + ${user.userId}}">팔로워</a>
+                </li>
+                <li class="profile__stat">
+                    <span class="profile__stat-number" th:text="${followCount}"></span><a
+                        th:href="@{'/follow/follow/' + ${user.userId}}">팔로우</a>
+                </li>
             </ul>
 
             <div class="profile__bio">
@@ -105,7 +111,7 @@
                     $("input[name='profileImage']").click();
                 }
             });
-            //업로드 파일체인지가 됐을경우 실행되는 이벤트 - form태그에 fileProfile은 hidden으로 넣어줌
+            //업로드 파일이 바꼈을 경우 실행되는 이벤트 - form 태그에 fileProfile은 hidden으로 넣어줌
             $("input[name='profileImage']").change(function() {
                 $("#frm_profile_img").submit();
             });

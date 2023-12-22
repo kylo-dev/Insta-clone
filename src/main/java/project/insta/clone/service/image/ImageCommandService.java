@@ -34,6 +34,16 @@ public class ImageCommandService {
     @Value("${file.path}")
     private String fileRealPath;
 
+    public void profileUpload(Long userId, MultipartFile file) throws IOException{
+        UUID uuid = UUID.randomUUID();
+        String uuidFilename = uuid + "_" + file.getOriginalFilename();
+        Path filePath = Paths.get(fileRealPath + uuidFilename);
+        Files.write(filePath, file.getBytes());
+
+        User principal = userRepository.findById(userId).get();
+        principal.setProfileImage(uuidFilename);
+    }
+
     public void imageUpload(ImageRequestDTO.ImageUploadDTO request, Long userId) throws IOException{
         UUID uuid = UUID.randomUUID();
         MultipartFile file = request.getFile();

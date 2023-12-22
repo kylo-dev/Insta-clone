@@ -17,7 +17,6 @@
 
     <div th:each="image : ${images}" class="photo u-default-box">
         <header class="photo__header">
-
             <img th:if="${image.user.profileImage != null}" th:src="@{'/upload/' + ${image.user.profileImage}}"/>
             <img th:unless="${image.user.profileImage != null}" th:src="@{/images/avatar.jpg}">
             <div class="photo_user_info">
