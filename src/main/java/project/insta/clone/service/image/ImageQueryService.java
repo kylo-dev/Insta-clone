@@ -26,4 +26,8 @@ public class ImageQueryService {
     public List<ImageResponseDTO.ImageFeedResultDTO> getImageFeeds(List<Image> images){
         return ImageResponseDTO.toImageFeedDTOList(images);
     }
+
+    public Image findByImageId(Long id){
+        return imageRepository.findById(id).get();
+    }
 }

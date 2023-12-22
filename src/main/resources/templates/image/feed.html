@@ -32,7 +32,7 @@
                 <span class="photo__action">
                     <!-- 좋아요(하트) 이미지 -->
                     <i th:classappend="${image.heart ? 'fa fa-heart heart heart-clicked' : 'fa fa-heart-o heart'}"
-                       th:onclick="'onFeedLoad(' + ${image.imageId} +')'" th:id="'photo_likes_count_' + ${image.imageId}"></i>
+                       th:onclick="'onFeedLoad(' + ${image.imageId} +')'" th:id="${image.imageId}"></i>
                 </span>
 
                 <span class="photo__action">

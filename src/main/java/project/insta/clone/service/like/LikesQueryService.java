@@ -4,8 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.insta.clone.domain.Image;
+import project.insta.clone.domain.Likes;
 import project.insta.clone.domain.User;
 import project.insta.clone.repository.LikesRepository;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,5 +27,9 @@ public class LikesQueryService {
 
     public Boolean existLikeByUserAndImage(User user, Image image){
         return likesRepository.existsByUserAndImage(user, image);
+    }
+
+    public Likes findByUserAndImage(User user, Image image){
+        return likesRepository.findByUserAndImage(user, image);
     }
 }
