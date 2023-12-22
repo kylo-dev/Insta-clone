@@ -18,11 +18,8 @@
     <div th:each="image : ${images}" class="photo u-default-box">
         <header class="photo__header">
 
-<!--            <img th:src="@{'/upload/' + ${image.user.profileImage}}"-->
-<!--                 th:onerror="'this.onerror=null; this.src='''/images/avatar.jpg''';'" />-->
-            <img th:src="@{'/upload/' + ${image.user.profileImage}}"
-                 th:onerror="this.src='/images/avatar.jpg'"/>
-
+            <img th:if="${image.user.profileImage != null}" th:src="@{'/upload/' + ${image.user.profileImage}}"/>
+            <img th:unless="${image.user.profileImage != null}" th:src="@{/images/avatar.jpg}">
             <div class="photo_user_info">
                 <span class="photo__username" th:text="${image.user.username}"></span>
                 <span class="photo__location" th:text="${image.location}"></span>
@@ -36,7 +33,7 @@
                 <span class="photo__action">
                     <!-- 좋아요(하트) 이미지 -->
                     <i th:classappend="${image.heart ? 'fa fa-heart heart heart-clicked' : 'fa fa-heart-o heart'}"
-                       th:onclick="'onFeedLoad('${image.imageId}')'" th:id="'photo_likes_count_' + ${image.imageId}"></i>
+                       th:onclick="'onFeedLoad(' + ${image.imageId} +')'" th:id="'photo_likes_count_' + ${image.imageId}"></i>
                 </span>
 
                 <span class="photo__action">

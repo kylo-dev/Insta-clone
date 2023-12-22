@@ -4,7 +4,6 @@ $(window).scroll(function() {
 	/*버그 수정 (근사치 계산)*/
     let checkNum = ($(window).scrollTop()) - ($(document).height() - $(window).height());
 	if (checkNum < 1 && checkNum > -1) {
-    	console.log('hi');
         page++;
         load_feed_box(); // 박스 3개씩 로드
     }
@@ -12,8 +11,9 @@ $(window).scroll(function() {
 
 function make_feed_box(image){
     let feed_box = `<div class="photo u-default-box">`;
-	feed_box += `<header class="photo__header">`;	
-	feed_box += `<img src="/upload/${image.user.profileImage}" onerror="this.onerror=null; this.src='/images/avatar.jpg'"/>`;
+	feed_box += `<header class="photo__header">`;
+	let profileImage = (image.user.profileImage != null) ? "/upload/" + image.user.profileImage : "images/avatar.jpg";
+	feed_box += `<img src="${profileImage}"/>`;
 	feed_box += `<div class="photo_user_info">`;
 	feed_box += `<span class="photo__username">${image.user.username}</span>`;
 	feed_box += `<span class="photo__location">${image.location}</span></div></header>`;
@@ -21,17 +21,17 @@ function make_feed_box(image){
 	feed_box += `<img src="/upload/${image.postImage}" /></div>`;
 	feed_box += `<div class="photo__info"><div class="photo__actions"><span class="photo__action">`;
 	
-	if(image.heart == true){
-		feed_box += `<i onclick="onFeedLoad(${image.id})" id="${image.id}" class="fa fa-heart heart heart-clicked"></i>`;
+	if(image.heart === true){
+		feed_box += `<i onclick="onFeedLoad(${image.imageId})" id="${image.imageId}" class="fa fa-heart heart heart-clicked"></i>`;
 	}else{
-		feed_box += `<i onclick="onFeedLoad(${image.id})" id="${image.id}" class="fa fa-heart-o heart"></i>`;
+		feed_box += `<i onclick="onFeedLoad(${image.imageId})" id="${image.imageId}" class="fa fa-heart-o heart"></i>`;
 	}
 		
 	feed_box += `</span> <span class="photo__action">`;
 	feed_box += `<i class="fa fa-comment-o"></i></span></div>`;
 	
 	// 수정 좋아요 카운트 증가
-	feed_box += `<span class="photo__likes" id="photo_likes_count_${image.id}">${image.likeCount}</span><span class="photo__likes"> likes</span><div class="photo_caption">`;
+	feed_box += `<span class="photo__likes" id="photo_likes_count_${image.imageId}">${image.likeCount}</span><span class="photo__likes"> likes</span><div class="photo_caption">`;
 	feed_box += `<span class="photo__username">${image.user.username} </span>`;
 	feed_box += `${image.caption}</div><div class="photo_tag">`;
     
@@ -44,7 +44,7 @@ function make_feed_box(image){
 	feed_box += `<span class="photo__comment-author">serranoarevalo</span>`;
 	feed_box += `i love this!</li><li class="photo__comment">`;
 	feed_box += `<span class="photo__comment-author">serranoarevalo</span>`;
-	feed_box += `i don't love this!</li></ul><span class="photo__date">${image.createDate}</span>`;
+	feed_box += `i don't love this!</li></ul><span class="photo__date">${image.createdAt}</span>`;
 	feed_box += `<div class="photo__add-comment-container">`;
 	feed_box += `<textarea placeholder="Add a comment..."></textarea>`;
     feed_box += `<i class="fa fa-ellipsis-h"></i></div></div></div >`;
@@ -55,6 +55,7 @@ function make_feed_box(image){
 async function load_feed_box(){
 	// fetch 로 다운로드
 	let response = await fetch(`/image/feed/scroll?page=${page}`);
+	console.log("page = " + page);
 	let images = await response.json();
 	
 	console.log(images);
@@ -65,17 +66,3 @@ async function load_feed_box(){
 	    $("#feed").append(feed_box);
 	});
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

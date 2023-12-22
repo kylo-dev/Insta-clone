@@ -10,9 +10,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import project.insta.clone.config.auth.PrincipalDetails;
 import project.insta.clone.domain.Image;
 import project.insta.clone.dto.image.ImageRequestDTO;
+import project.insta.clone.dto.image.ImageResponseDTO;
 import project.insta.clone.service.image.ImageCommandService;
 import project.insta.clone.service.image.ImageQueryService;
 import project.insta.clone.service.like.LikesQueryService;
@@ -54,6 +56,24 @@ public class ImageController {
         model.addAttribute("principal", principalDetails);
         model.addAttribute("images", images);
         return "image/feed";
+    }
+
+    @GetMapping("/image/feed/scroll")
+    public @ResponseBody List<ImageResponseDTO.ImageFeedResultDTO> imageFeedScroll(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model,
+                                                                @PageableDefault(size = 3, sort = "imageId", direction = Sort.Direction.DESC)Pageable pageable){
+        List<Image> images = imageQueryService.findImageFeed(pageable, principalDetails.getUser().getUserId());
+
+        for (Image image: images){
+            Boolean like = likesQueryService.existLikeByUserAndImage(principalDetails.getUser(), image);
+            if (like){
+                image.setHeart(true);
+            }
+
+            int likeCount = likesQueryService.countLikeCountByImageId(image.getImageId());
+            image.setLikeCount(likeCount);
+        }
+        imageQueryService.getImageFeeds(images);
+        return imageQueryService.getImageFeeds(images);
     }
 
     @GetMapping("/image/upload")

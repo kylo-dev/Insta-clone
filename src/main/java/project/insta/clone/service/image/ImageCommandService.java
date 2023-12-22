@@ -40,7 +40,7 @@ public class ImageCommandService {
 
         String uuidFilename = uuid + "_" + file.getOriginalFilename();
 
-        Path filePath = Paths.get(fileRealPath + uuidFilename);
+        Path filePath = Paths.get(fileRealPath + uuidFilename); // 파일의 저장 경로 설정
         Files.write(filePath, file.getBytes()); // 하드디스크 기록
 
         User user = userRepository.findById(userId).orElseThrow(
