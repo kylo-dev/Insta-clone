@@ -18,7 +18,7 @@
 
         <div th:each="follower : ${followers}" class="explore__user">
             <div class="explore__content">
-                <img th:if="${follower.fromUser.profileImage != null}" th:src="@{'/upload/' + follower.fromUser.profileImage}"/>
+                <img th:if="${follower.fromUser.profileImage != null}" th:src="@{'/upload/' + ${follower.fromUser.profileImage}}"/>
                 <img th:unless="${follower.fromUser.profileImage != null}" th:src="@{/images/avatar.jpg}">
 <!--                <img th:src="@{'/upload/' + ${follower.fromUser.profileImage}}" th:onerror="this.src='/images/avatar.jpg'"/>-->
                 <div class="explore__info">
